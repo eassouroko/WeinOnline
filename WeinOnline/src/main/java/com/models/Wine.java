@@ -5,7 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -22,10 +25,11 @@ public class Wine implements Serializable {
 	 * Defining beans variables
 	 * */
 	@Id
-	@Enumerated(EnumType.STRING)
 	private String windeCode;
-	@Enumerated(EnumType.STRING)
-	private String wineCategory;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fk_Winecategory")
+	private WineCategory wineCategory;
 	
 	private String wineName;
 	private String wineDescription;
@@ -40,7 +44,7 @@ public class Wine implements Serializable {
 		super();
 	}
 
-	public Wine(String wineCategory, String windeCode, String wineName, String wineDescription, double wineUnitPrice,
+	public Wine(WineCategory wineCategory, String windeCode, String wineName, String wineDescription, double wineUnitPrice,
 			double wineSize, double alcoolContent, int numberPerPackage, String wineColor) {
 		super();
 		this.wineCategory = wineCategory;
@@ -54,11 +58,11 @@ public class Wine implements Serializable {
 		this.wineColor = wineColor;
 	}
 
-	public String getWineCategory() {
+	public WineCategory getWineCategory() {
 		return wineCategory;
 	}
 
-	public void setWineCategory(String wineCategory) {
+	public void setWineCategory(WineCategory wineCategory) {
 		this.wineCategory = wineCategory;
 	}
 
@@ -126,8 +130,88 @@ public class Wine implements Serializable {
 		this.wineColor = wineColor;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(alcoolContent);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + numberPerPackage;
+		result = prime * result + ((windeCode == null) ? 0 : windeCode.hashCode());
+		result = prime * result + ((wineCategory == null) ? 0 : wineCategory.hashCode());
+		result = prime * result + ((wineColor == null) ? 0 : wineColor.hashCode());
+		result = prime * result + ((wineDescription == null) ? 0 : wineDescription.hashCode());
+		result = prime * result + ((wineName == null) ? 0 : wineName.hashCode());
+		temp = Double.doubleToLongBits(wineSize);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(wineUnitPrice);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Wine))
+			return false;
+		Wine other = (Wine) obj;
+		if (Double.doubleToLongBits(alcoolContent) != Double.doubleToLongBits(other.alcoolContent))
+			return false;
+		if (numberPerPackage != other.numberPerPackage)
+			return false;
+		if (windeCode == null) {
+			if (other.windeCode != null)
+				return false;
+		} else if (!windeCode.equals(other.windeCode))
+			return false;
+		if (wineCategory == null) {
+			if (other.wineCategory != null)
+				return false;
+		} else if (!wineCategory.equals(other.wineCategory))
+			return false;
+		if (wineColor == null) {
+			if (other.wineColor != null)
+				return false;
+		} else if (!wineColor.equals(other.wineColor))
+			return false;
+		if (wineDescription == null) {
+			if (other.wineDescription != null)
+				return false;
+		} else if (!wineDescription.equals(other.wineDescription))
+			return false;
+		if (wineName == null) {
+			if (other.wineName != null)
+				return false;
+		} else if (!wineName.equals(other.wineName))
+			return false;
+		if (Double.doubleToLongBits(wineSize) != Double.doubleToLongBits(other.wineSize))
+			return false;
+		if (Double.doubleToLongBits(wineUnitPrice) != Double.doubleToLongBits(other.wineUnitPrice))
+			return false;
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Wine [windeCode=" + windeCode + ", wineCategory=" + wineCategory + ", wineName=" + wineName
+				+ ", wineDescription=" + wineDescription + ", wineUnitPrice=" + wineUnitPrice + ", wineSize=" + wineSize
+				+ ", alcoolContent=" + alcoolContent + ", numberPerPackage=" + numberPerPackage + ", wineColor="
+				+ wineColor + "]";
 	}
 	
 	

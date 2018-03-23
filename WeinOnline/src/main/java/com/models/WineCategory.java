@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -26,10 +27,9 @@ public class WineCategory implements Serializable {
 	@GeneratedValue
 	private long catId;
 	private String categoryDescription;
-	@OneToMany(cascade = CascadeType.ALL,targetEntity=com.models.Wine.class,
-            fetch = FetchType.LAZY,
-            mappedBy = "wineList")
-	private java.util.Set<Wine> wineList= new HashSet<Wine>();
+	@OneToMany
+	@JoinColumn(name = "fk_Winecategory")
+	private java.util.Set<Wine> wineList;
 	
 	public long getCatId() {
 		return catId;
@@ -59,11 +59,61 @@ public class WineCategory implements Serializable {
 		super();
 	}
 
-	public WineCategory(long catId, String categoryDescription, Set<Wine> wineList) {
+	public WineCategory(String categoryDescription) {
 		super();
-		this.catId = catId;
+		//this.catId = catId;
 		this.categoryDescription = categoryDescription;
-		this.wineList = wineList;
+		//this.wineList = wineList;
+		wineList= new HashSet<Wine>();
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (catId ^ (catId >>> 32));
+		result = prime * result + ((categoryDescription == null) ? 0 : categoryDescription.hashCode());
+		result = prime * result + ((wineList == null) ? 0 : wineList.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof WineCategory))
+			return false;
+		WineCategory other = (WineCategory) obj;
+		if (catId != other.catId)
+			return false;
+		if (categoryDescription == null) {
+			if (other.categoryDescription != null)
+				return false;
+		} else if (!categoryDescription.equals(other.categoryDescription))
+			return false;
+		if (wineList == null) {
+			if (other.wineList != null)
+				return false;
+		} else if (!wineList.equals(other.wineList))
+			return false;
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "WineCategory [catId=" + catId + ", categoryDescription=" + categoryDescription + ", wineList="
+				+ wineList + "]";
 	}
 	
 	
